@@ -32,14 +32,14 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
     # Read image
-    image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file).convert("RGB")
     img_array = np.array(image)
 
     st.subheader("📷 Uploaded Image Preview")
     st.image(image, use_column_width=True)
 
     # Convert to grayscale
-    gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
 
     # -----------------------------
     # Face Detection Parameters
@@ -68,7 +68,13 @@ if uploaded_file is not None:
 
     # Draw rectangles and labels
     for (x, y, w, h) in faces:
-        cv2.rectangle(img_array, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(
+            img_array,
+            (x, y),
+            (x + w, y + h),
+            (0, 255, 0),
+            2
+        )
         cv2.putText(
             img_array,
             "Human face identified",
@@ -79,8 +85,6 @@ if uploaded_file is not None:
             2
         )
 
-    st leaving
-
     st.subheader("✅ Face Detection Result")
     st.image(img_array, use_column_width=True)
 
@@ -88,3 +92,4 @@ if uploaded_file is not None:
 
 else:
     st.info("👆 Please upload an image to start face detection.")
+
